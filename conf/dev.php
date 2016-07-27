@@ -1,13 +1,15 @@
 <?php
 return array(
     'mysql' => array(
-        'host' => '172.26.41.3',
-        'port' => 3306,
-        'dbname' => 'db_test',
-        'username' => 'root',
-        'password' => 'root',
-        'charset' => 'utf8',
-        'table_aliases' => array()
+        'default' => array(
+            'host' => '172.26.41.3',
+            'port' => 3306,
+            'dbname' => 'db_test',
+            'username' => 'root',
+            'password' => 'root',
+            'charset' => 'utf8',
+            'table_aliases' => array()
+        )
     ),
     'redis' => array(
         'host' => '127.0.0.1',
