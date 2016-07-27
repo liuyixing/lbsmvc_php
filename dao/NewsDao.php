@@ -1,6 +1,8 @@
 <?php
 namespace lbsmvc\dao;
 
+use lbsmvc\core\MysqlDao;
+
 class NewsDao
 {
     public static function getNewsList($offset, $limit)

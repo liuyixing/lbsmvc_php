@@ -6,7 +6,7 @@ require __DIR__.'/core/init.php';
 {
     echo "PHP shutdown";
 };
-\lbsmvc\core\ErrorHandler::init();
+//\lbsmvc\core\ErrorHandler::init();
 
 // 解包函数
 $pack_func = function ()

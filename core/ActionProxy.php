@@ -20,6 +20,6 @@ class ActionProxy
 
         // postAction
         
-        return $unpack_func($ret);
+        return $ret;
     }
 }

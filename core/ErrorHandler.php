@@ -52,9 +52,12 @@ class ErrorHandler
         Logger::log(Logger::LEVEL_PHPERROR, $msg, __FILE__, __LINE__);
 
         // 回调注册的shutdown函数
+	/*
+	var_dump(self::$shutdown_func);
         if (self::$shutdown_func !== NULL) {
-            self::$shutdown_func();
+            self::$shutdown_func->call(NULL);
         }
+	*/
 
     }
 }

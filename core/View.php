@@ -1,5 +1,5 @@
 <?php
-namespace lec\core;
+namespace lbsmvc\core;
 
 class View
 {
