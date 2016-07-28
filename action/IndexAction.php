@@ -12,7 +12,7 @@ class IndexAction extends BaseAction
         $data = array(
             'news' => $news_list = NewsService::getNewsList($page, $size)
         );
-    	return self::rspPage($data, 'index_index');
+    	return self::display($data, 'index_index');
     }
 }
 

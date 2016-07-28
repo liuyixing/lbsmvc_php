@@ -29,7 +29,7 @@ class MysqlDao
     	// 访问限制
 		static $allowed_methods = array(
 			'getAll' => true, 'getOne' => true, 'delete' => true, 'insert' => true, 'update' => true,
-			'begin' => true, 'commit' => true, 'rollback' => true
+			'begin' => true, 'commit' => true, 'rollback' => true, 'execute' => true
 		);
 		if (empty($allowed_methods[$func]))
 		{
