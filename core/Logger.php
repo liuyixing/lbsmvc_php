@@ -8,7 +8,8 @@ class Logger
     public static $log_file_mode = 0777;
     public static $log_file_maxsize = 209715200;
     public static $log_file_ext = '.log';
-    public static $cache_log = true;
+    public static $cache_logs = true;
+    public static $display_logs = true;
     private static $_messages = array();
     const LEVEL_DEBUG = 1;
     const LEVEL_INFO = 2;
@@ -49,17 +50,28 @@ class Logger
         self::log(self::LEVEL_WARN, $message, $category);
     }
     
-    public static function log($level, $message, $category, $file = NULL, $line = NULL)
+    public static function log($level, $message, $category = 'default', $file = NULL, $line = NULL)
     {
         if ($file === NULL && $line === NULL) {
-            $stack_traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2); // 5.4.0开始，debug_backtrace增加了limit参数
-            $file = $stack_traces[1]['file'];
-            $line = $stack_traces[1]['line'];
+            $stack_traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2); // 5.4.0开始，debug_backtrace增加了limit参数
+	    if (isset($stack_traces[1]['class']) && $stack_traces[1]['class'] == __CLASS__)
+	    {
+		$file = $stack_traces[1]['file'];
+		$line = $stack_traces[1]['line'];
+	    }
+	    else
+	    {
+		$file = $stack_traces[0]['file'];
+		$line = $stack_traces[0]['line'];
+	    }
         }
+
+	$file = empty($file) ? 'unknown file' : $file;
+	$line = empty($line) ? 'unknown line' : $line;
 
     	self::$_messages[] = array($message, $file, $line, $level, date('Y-m-d H:i:s'), $category);
 
-        if (!self::$cache_log) {
+        if (!self::$cache_logs) {
             self::flush();
         }
     }
@@ -94,6 +106,7 @@ class Logger
     	      
     	    // 生成目标日志文件的全路径名
     	    $log_file = self::$log_path . DS . str_replace('-', '', $date) . DS . $item[5] . self::$log_file_ext;
+	    $log_file = realpath($log_file);
     	    
     	    if (!isset($logs[$log_file]))
     	    {
@@ -107,10 +120,25 @@ class Logger
     	}
     	unset($item);
     	
-    	// 输出到文件
+    	// 输出日志
     	foreach ($logs as $file => $content)
     	{
-    	    self::_writeFile($file, $content);
+	    if (self::$display_logs)
+	    {
+		if (PHP_SAPI == 'cli')
+		{
+		    echo "$file\n$content";
+		}
+		else
+		{
+		    $content = str_replace("\n", "<br>", $content);
+		    echo "$file<br>$content";
+		}
+	    }
+	    else
+	    {
+		self::_writeFile($file, $content);
+	    }
     	}
     }
     
