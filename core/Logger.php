@@ -23,7 +23,7 @@ class Logger
             function ()
             {
                 self::flush();
-                // 保证flush是最后一个执行shutdown函数，从而保证log全部输出到文件
+                // 保证flush是最后一个shutdown执行的函数，从而保证log全部输出到文件
                 register_shutdown_function(__CLASS__.'::flush');
             }
         ); 
@@ -31,32 +31,32 @@ class Logger
        
     public static function info($message, $category = 'default')
     {
-        self::log($message, self::LEVEL_INFO, $category);
+        self::log(self::LEVEL_INFO, $message, $category);
     }
 
     public static function error($message, $category = 'default')
     {
-        self::log($message, self::LEVEL_ERROR, $category); 
+        self::log(self::LEVEL_ERROR, $message, $category); 
     }
 
     public static function debug($message, $category = 'default')
     {
-        self::log($message, self::LEVEL_DEBUG, $category);
+        self::log(self::LEVEL_DEBUG, $message, $category);
     }
 
     public static function warn($message, $category = 'default')
     {
-        self::log($message, self::LEVEL_WARN, $category);
+        self::log(self::LEVEL_WARN, $message, $category);
     }
     
-    public static function log($message, $level, $category, $file = NULL, $line = NULL)
+    public static function log($level, $message, $category, $file = NULL, $line = NULL)
     {
-        if ($file !== NULL || $line !== NULL) {
+        if ($file === NULL && $line === NULL) {
             $stack_traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2); // 5.4.0开始，debug_backtrace增加了limit参数
             $file = $stack_traces[1]['file'];
             $line = $stack_traces[1]['line'];
         }
-        
+
     	self::$_messages[] = array($message, $file, $line, $level, date('Y-m-d H:i:s'), $category);
 
         if (!self::$cache_log) {
@@ -69,6 +69,8 @@ class Logger
     	if (empty(self::$_messages)) {
     	    return;
     	}	
+	$messages = self::$_messages;
+    	self::$_messages = array();
 
     	static $level_names = array(
     	    self::LEVEL_DEBUG => 'debug',
@@ -79,7 +81,7 @@ class Logger
     	);
 
     	$logs = array();
-    	foreach (self::$_messages as &$item)
+    	foreach ($messages as &$item)
     	{
     	    // 判断日志记录的等级是否大于等于当前需要记录的日志等级
     	    if (!isset($item[3]) || $item[3] < self::$min_log_level)
@@ -110,8 +112,6 @@ class Logger
     	{
     	    self::_writeFile($file, $content);
     	}
-
-    	self::$_messages = array();
     }
     
     private static function _writeFile($file, $content)

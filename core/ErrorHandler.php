@@ -15,6 +15,7 @@ class ErrorHandler
     	set_exception_handler(__CLASS__.'::handleException');
     }
     
+    // 开始执行这个函数的时候，PHP会将error_handler恢复成默认的error_handler，执行完毕才恢复成用户设置的error_handler。通过这种方式来避免死循环 
     public static function handleError($code, $message, $file, $line)
     {
         switch ($code)
@@ -34,9 +35,9 @@ class ErrorHandler
                 $msg = "PHP Unknown error type: [$code] $message";
                 break;
         }
-        Logger::log(Logger::LEVEL_PHPERROR, $msg, $file, $line);
+        Logger::log(Logger::LEVEL_PHPERROR, $msg, 'default', $file, $line);
         // 返回false将继续执行PHP内部的错误处理器
-    	return false;
+    	return true;
     }
     
     public static function handleException($exc)
@@ -48,16 +49,12 @@ class ErrorHandler
     {   
         $last_error = error_get_last();
         $stack_traces = debug_backtrace();
-        $msg = "PHP shutdown, fatal error: " . print_r($last_error) . ", stack traces: " . print_r($stack_traces);
-        Logger::log(Logger::LEVEL_PHPERROR, $msg, __FILE__, __LINE__);
+        $msg = "PHP shutdown, fatal error: " . var_export($last_error, true) . ", stack traces: " . var_export($stack_traces, true);
+        Logger::log(Logger::LEVEL_PHPERROR, $msg, 'rsp_error', __FILE__);
 
         // 回调注册的shutdown函数
-	/*
-	var_dump(self::$shutdown_func);
         if (self::$shutdown_func !== NULL) {
-            self::$shutdown_func->call(NULL);
+            call_user_func(self::$shutdown_func);
         }
-	*/
-
     }
 }
