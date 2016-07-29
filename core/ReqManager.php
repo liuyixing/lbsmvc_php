@@ -3,17 +3,15 @@ namespace lbsmvc\core;
 
 class ReqManager
 {
-	public static $route;
-	public static $client_ip;
+	public static $route = 'index_index';
+	public static $class = 'IndexAction';
+	public static $method = 'index';
+	public static $params = array();
+	public static $other = array();
 
 	public static function init()
 	{
 		$route = empty($_GET['r']) ? 'index_index' : strtolower($_GET['r']);
-	    if (!preg_match('/^[a-z][a-z0-9]+(_[a-z][a-z0-9]+)?$/', $route))
-	    {
-	    	Logger::error('route')
-	        return false;
-	    }
 
 	    list($action_class, $action_method) = explode('_', $route);
 

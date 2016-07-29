@@ -3,11 +3,11 @@ namespace lbsmvc\core;
 
 class RspManager
 {
-	private static $isSent = false;
+	private static $is_sent = false;
 
-	public static function send()
+	public static function send($content = '')
 	{
-		if (!$isSent)
+		if (!$is_sent)
 		{
 
 		}

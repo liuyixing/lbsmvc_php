@@ -11,8 +11,8 @@ define('TPL_PATH', ROOT_PATH . 'static' . DS . 'tpl' . DS);
 // 注册类加载器
 require CORE_PATH.'/ClassLoader.php';
 
-// 加载全局函数
-require CORE_PATH.'/func.php';
+// 全局函数和常量
+require CORE_PATH.'/gb.php';
 
 // 加载配置文件
 \lbsmvc\core\ConfigManager::init();

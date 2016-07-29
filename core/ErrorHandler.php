@@ -3,13 +3,11 @@ namespace lbsmvc\core;
 
 class ErrorHandler
 {
-    public static $shutdown_func;
+    public static $conf;
 
     public static function init()
     {
-    	//error_reporting
-    	//display_errors
-    	//log_errors error_log
+        // error_reporting display_errors log_errors error_log
         register_shutdown_function(__CLASS__.'::handleFatalError');
     	set_error_handler(__CLASS__.'::handleError');
     	set_exception_handler(__CLASS__.'::handleException');
@@ -42,19 +40,23 @@ class ErrorHandler
     
     public static function handleException($exc)
     {
-        Logger::log(Logger::LEVEL_PHPERROR, $exc->getMessage(), $exc->getFile(), $exc->getLine());
+        Logger::log(Logger::LEVEL_PHPERROR, $exc->getMessage(), 'default', $exc->getFile(), $exc->getLine());
     }
 
     public static function handleFatalError()
     {   
         $last_error = error_get_last();
-        $stack_traces = debug_backtrace();
-        $msg = "PHP shutdown, fatal error: " . var_export($last_error, true) . ", stack traces: " . var_export($stack_traces, true);
-        Logger::log(Logger::LEVEL_PHPERROR, $msg, 'rsp_error', __FILE__);
+        if (NULL !== $last_error)
+        {
+            $stack_traces = debug_backtrace();
+            $msg = "php shutdown, fatal error: " . var_export($last_error, true) . ", stack traces: " . var_export($stack_traces, true);
+            Logger::log(Logger::LEVEL_PHPERROR, $msg, 'shutdown_errors', __FILE__, __LINE__);
+        }
 
         // 回调注册的shutdown函数
-        if (self::$shutdown_func !== NULL) {
-            call_user_func(self::$shutdown_func);
+        if (isset(self::$conf['shutdown_func']) && is_callable(self::$conf['shutdown_func'])) {
+            call_user_func(self::$conf['shutdown_func']);
         }
     }
 }
+ErrorHandler::$conf = ConfigManager::get('eh');
