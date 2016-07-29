@@ -13,6 +13,11 @@ class ReqManager
 	{
 		$route = empty($_GET['r']) ? 'index_index' : strtolower($_GET['r']);
 
+		if (!preg_match('/^[a-z][a-z0-9]+(_[a-z][a-z0-9]+)?$/', $route))
+	    {
+			return false;
+		}
+
 	    list($action_class, $action_method) = explode('_', $route);
 
 	    if (empty($action_method))
@@ -20,10 +25,14 @@ class ReqManager
 	        $action_method = 'index';
 	    }
 
-	    $action = '\\lbsmvc\\action\\'.ucfirst($action_class) . 'Action::' . $action_method;
 	    $params = array_merge($_GET, $_POST);
 	    unset($_GET, $_POST);
+		
+		self::$route = $route;
+		self::$class = $action_class;
+		self::$method = $action_method;
+		self::$params = $params;
 	    
-	    return array('action' => $action, 'params' => $params);
+	    return true;
 	}
 }

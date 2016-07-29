@@ -12,8 +12,7 @@ class BaseAction
     	{
             $tpl_name = ReqManager::$route;
     	}
-        return array(CODE_HTML, View::render($tpl_name, $tpl_data));	
-    }
+        return array(CODE_OUTPUT_HTML, View::render($tpl_name, $tpl_data));	}
 
     public static function GoHome()
     {
@@ -32,7 +31,7 @@ class BaseAction
 
     public static function Json($code, $msg = '', $data = array())
     {
-        return array(CODE_JSON, json_encode(array(  
+        return array(CODE_OUTPUT_JSON, json_encode(array(  
             'code' => $code,
             'msg' => $msg,
             'data' => $data

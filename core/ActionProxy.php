@@ -24,19 +24,23 @@ class ActionProxy
         {
             return $rsp_class::send($ret); 
         }
+		
+		$action_class = "\\lbsmvc\\action\\".ucfirst($req_class::$class)."Action";
+		$action_method = $req_class::$method;
+		$action_params = $req_class::$params;
 
-        if (!class_exists($req_class::$action_class))
+        if (!class_exists($action_class))
         {
-            return $rsp_class::send(CODE_CLASS_NOT_EXISTS);
+            return $rsp_class::send(CODE_ACTION_CLASS_NOT_EXISTS);
         }
 
-        if (!method_exists($req_class::$action_class, $req_class::$action_method))
+        if (!method_exists($action_class, $action_method))
         {
-            return $rsp_class::send(CODE_METHOD_NOT_EXISTS);
+            return $rsp_class::send(CODE_ACTION_METHOD_NOT_EXISTS);
         }
 
         // call preActions
-        foreach ($pre_actions as $act)
+        foreach (self::$pre_actions as $act)
         {
             $ret = call_user_func($act, $req_class::$params);
             if (false == $ret)
@@ -45,14 +49,14 @@ class ActionProxy
             }
         }
 
-        $ret = call_user_func_array($action, array($target['params']));
+        $ret =  call_user_func_array(array($action_class, $action_method), array($action_params));
 
         // call postActions
-        foreach ($post_actions as $act)
+        foreach (self::$post_actions as $act)
         {
             $ret = call_user_func($act);
         }
 
-        return $ret;
+        return $rsp_class::send($ret);
     }
 }

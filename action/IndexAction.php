@@ -7,7 +7,7 @@ class IndexAction extends BaseAction
 {
     public static function index($req)
     {
-    	$page = empty($req[]) ? 1 : (int)$req->$params['p'];
+    	$page = empty($req['p']) ? 1 : (int)$req['p'];
     	$size = 10;
         $data = array(
             'news' => $news_list = NewsService::getNewsList($page, $size)

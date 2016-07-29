@@ -3,7 +3,7 @@ namespace lbsmvc\core;
 
 class ConfigManager
 {
-    private static $conf = array();
+    public static $conf = array();
     private static $cache = array(); // 缓存已经获取过的配置，加快速度
     
     public static function init()
@@ -52,12 +52,34 @@ class ConfigManager
 
     public static function set($key, $value)
     {
-    	if (!is_string($key) ||	trim(key) == false)
+    	if (!is_string($key) ||	trim($key) == false)
         {
     	    return false; 
     	} 
-    	
-    	self::$cache[$key] = $value;
+		
+		$parts = explode('.', $key);
+		$count = count($parts);
+		
+		$conf = &self::$conf;
+		for ($i = 0; $i < $count; ++$i)
+		{
+			if (!isset($conf[$parts[$i]]))
+			{	
+				$conf[$parts[$i]] = array();
+				$conf = &$conf[$parts[$i]];	
+				continue;
+			}	
+			if (is_array($conf[$parts[$i]] || ($i + 1) == $count))
+			{
+				$conf = &$conf[$parts[$i]];
+				continue;
+			}
+			return false;
+		}
+		$conf = $value;
+		unset($conf);
+	
+		self::$cache[$key] = $value;
     	return true;
     }
 
