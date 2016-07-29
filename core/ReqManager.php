@@ -9,7 +9,7 @@ class ReqManager
 	public static $params = array();
 	public static $other = array();
 
-	public static function init()
+	public static function unpack()
 	{
 		$route = empty($_GET['r']) ? 'index_index' : strtolower($_GET['r']);
 

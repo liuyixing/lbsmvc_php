@@ -5,7 +5,7 @@ class RspManager
 {
 	private static $is_sent = false;
 
-	public static function send($ret = '')
+	public static function pack($ret = '')
 	{
 		if (self::$is_sent)
 		{
@@ -13,18 +13,30 @@ class RspManager
 		}
 
 		$code = is_int($ret) ? $ret : $ret[0];
-			
 		switch ($code)
 		{
-			case (CODE_OUTPUT_HTML):
-			//@TODO: 输出相关的响应头信息
-				echo $ret[1];
-				break;
-			case (CODE_OUPUT_JSON):
-				echo $ret[1];
-				break;
+			case CODE_OUTPUT_HTML:
+				return self::packHtml($ret[1]);
+			case CODE_OUPUT_JSON:
+				return self::packJson($ret[1]);
+			default:
+				return self::packError($code);
 		}
-		self::$is_sent = true;
 	}
 
+	public static function packHtml($content)
+	{
+		header("Content-Type:text/html;charset=UTF-8");
+		return $content;
+	}
+
+	public static function packJson($content)
+	{
+		header('Content-type:application/json;charset=UTF-8');
+		return json_encode($content);
+	}
+
+	public static function packError($code)
+	{
+	}
 }

@@ -31,10 +31,10 @@ class BaseAction
 
     public static function Json($code, $msg = '', $data = array())
     {
-        return array(CODE_OUTPUT_JSON, json_encode(array(  
+        return array(CODE_OUTPUT_JSON, array(  
             'code' => $code,
             'msg' => $msg,
             'data' => $data
-        )));
+        ));
     }
 }

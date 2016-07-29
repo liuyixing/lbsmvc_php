@@ -6,4 +6,9 @@ require __DIR__.'/core/init.php';
 
 \lbsmvc\core\ErrorHandler::init();
 
-\lbsmvc\core\ActionProxy::handle('\lbsmvc\core\ReqManager', '\lbsmvc\core\RspManager');
+$ret = \lbsmvc\core\Proxy::route('\lbsmvc\core\ReqManager', '\lbsmvc\core\RspManager');
+
+if (is_string($ret))
+{
+	echo $ret;
+}
