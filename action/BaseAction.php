@@ -12,11 +12,12 @@ class BaseAction
     	{
             $tpl_name = ReqManager::$route;
     	}
-        return array(CODE_OUTPUT_HTML, View::render($tpl_name, $tpl_data));	}
+        return array(CODE_OUTPUT_HTML, View::render($tpl_name, $tpl_data));
+    }
 
     public static function GoHome()
     {
-        return self::jumpTo(ConfigManager::get('index_url'));
+        return self::JumpTo(ConfigManager::get('index_url'));
     }
 
     public static function GoBack()

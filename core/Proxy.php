@@ -16,47 +16,45 @@ class Proxy
         self::$post_actions[] = $func;
     }
 
-    public static function route($req_class, $rsp_class)
+    public static function route($request, $response)
     {
-        $ret = $req_class::unpack();
-
-        if (false === $ret)
-        {
-            return $rsp_class::pack(CODE_UNPACK_REQUEST_FAILED); 
-        }
-		
-		$action_class = "\\lbsmvc\\action\\".ucfirst($req_class::$class)."Action";
-		$action_method = $req_class::$method;
-		$action_params = $req_class::$params;
+		$action_class = "\\lbsmvc\\action\\".ucfirst($request->action_class)."Action";
+		$action_method = $request->action_method;
 
         if (!class_exists($action_class))
         {
-            return $rsp_class::pack(CODE_ACTION_CLASS_NOT_EXISTS);
+            $response->setError(ERR_ACTION_CLASS_NOT_EXISTS);
+            return false;
         }
 
         if (!method_exists($action_class, $action_method))
         {
-            return $rsp_class::pack(CODE_ACTION_METHOD_NOT_EXISTS);
+            $response->setError(ERR_ACTION_METHOD_NOT_EXISTS);
+            return false;
         }
 
         // call preActions
         foreach (self::$pre_actions as $act)
         {
-            $ret = call_user_func($act, $req_class, $rsp_class);
-            if (false == $ret)
+            $ret = call_user_func_array($act, array($request, $response));
+            if (false === $ret)
             {
-                $rsp_class::unpack();
+                return false;
             }
         }
 
-        $ret = call_user_func_array(array($action_class, $action_method), array($action_params));
+        $ret = call_user_func_array(array($action_class, $action_method), array($request, $reponse));
 
         // call postActions
         foreach (self::$post_actions as $act)
         {
-            $ret = call_user_func($act);
+            $ret = call_user_func_array($act, array($request, $response));
+            if (false === $ret)
+            {
+                return false;
+            }
         }
 
-        return $rsp_class::pack($ret);
+        return $ret;
     }
 }

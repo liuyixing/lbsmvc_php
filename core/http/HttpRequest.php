@@ -1,15 +1,18 @@
 <?php
-namespace lbsmvc\core;
+namespace lbsmvc\core\http;
 
-class ReqManager
+use lbsmvc\core\Request;
+
+class HttpRequest extends Request
 {
-	public static $route = 'index_index';
-	public static $class = 'IndexAction';
-	public static $method = 'index';
-	public static $params = array();
-	public static $other = array();
+	public $http_method;
+	public $host;
+	public $url;
+	public $referer;
+	public $user_agent;
+	public $cookie;
 
-	public static function unpack()
+	public function __construct()
 	{
 		$route = empty($_GET['r']) ? 'index_index' : strtolower($_GET['r']);
 
@@ -28,11 +31,11 @@ class ReqManager
 	    $params = array_merge($_GET, $_POST);
 	    unset($_GET, $_POST);
 		
-		self::$route = $route;
-		self::$class = $action_class;
-		self::$method = $action_method;
-		self::$params = $params;
-	    
-	    return true;
+		$this->route = $route;
+		$this->action_class = $action_class;
+		$this->action_method = $action_method;
+		$this->action_params = $params;
+
+		return true;
 	}
 }

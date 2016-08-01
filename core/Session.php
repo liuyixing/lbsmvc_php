@@ -1,17 +1,12 @@
 <?php
 namespace lbsmvc\core;
 
-class Session
+abstract class Session
 {
-	public static $user;
+	public $user;
 
-	public static function init()
+	public function isLogin()
 	{
-
-	}
-
-	public static function isLogin()
-	{
-		return self::$user !== NULL;
+		return NULL !== $this->user;
 	}
 }

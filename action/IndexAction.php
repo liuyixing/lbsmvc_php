@@ -5,13 +5,13 @@ use lbsmvc\service\NewsService;
 
 class IndexAction extends BaseAction
 {
-    public static function index($req)
+    public static function index($request, $response)
     {
-    	$page = empty($req['p']) ? 1 : (int)$req['p'];
+    	$page = empty($request->params['p']) ? 1 : (int)$request->params['p'];
     	$size = 10;
         $data = array(
-            'news' => $news_list = NewsService::getNewsList($page, $size)
+            'news' => NewsService::getNewsList($page, $size)
         );
-    	return self::Html($data, 'index_index');
+    	return $response->display($data);
     }
 }

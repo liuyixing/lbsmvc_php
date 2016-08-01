@@ -6,9 +6,9 @@ require __DIR__.'/core/init.php';
 
 \lbsmvc\core\ErrorHandler::init();
 
-$ret = \lbsmvc\core\Proxy::route('\lbsmvc\core\ReqManager', '\lbsmvc\core\RspManager');
+$request = new \lbsmvc\core\http\HttpRequest;
+$response = new \lbsmvc\core\http\HttpResponse($request);
 
-if (is_string($ret))
-{
-	echo $ret;
-}
+$ret = Proxy::route($request, $response);
+
+echo $ret ? $response->getContent() : $response->getError();
