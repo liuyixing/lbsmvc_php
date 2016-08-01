@@ -1,6 +1,5 @@
 <?php
-namespace lbs;
-
+namespace LBS;
 class View
 {
     public static $tpl_ext = '.tpl';

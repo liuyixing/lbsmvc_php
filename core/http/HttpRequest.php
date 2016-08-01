@@ -1,8 +1,4 @@
 <?php
-namespace lbs\http;
-
-use lbs\Request;
-
 class HttpRequest extends Request
 {
 	public function __construct()

@@ -1,8 +1,4 @@
 <?php
-namespace dao;
-
-use lbs\MysqlDao;
-
 class NewsDao extends MysqlDao
 {
     public static function getNewsList($offset, $limit)

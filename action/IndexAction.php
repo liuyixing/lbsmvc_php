@@ -1,8 +1,4 @@
 <?php
-namespace action;
-
-use service\NewsService;
-
 class IndexAction
 {
     public static function index($request, $response)

@@ -1,6 +1,5 @@
 <?php
-namespace lbs;
-
+namespace LBS;
 abstract class Session
 {
 	public $user;

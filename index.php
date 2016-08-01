@@ -2,13 +2,13 @@
 require __DIR__.'/core/init.php';
 
 // 配置shutdown函数
-\lbs\ConfigManager::set('eh.shutdown_func', array('\lbs\RspManager', 'send'));
+C::set('eh.shutdown_func', array('RspManager', 'send'));
 
-\lbs\ErrorHandler::init();
+ErrorHandler::init();
 
-$request = new \lbs\http\HttpRequest;
-$response = new \lbs\http\HttpResponse($request);
+$request = new HttpRequest;
+$response = new HttpResponse($request);
 
-$ret = \lbs\Proxy::route($request, $response);
+$ret = Proxy::route($request, $response);
 
 echo $ret ? $response->getContent() : $response->getError();

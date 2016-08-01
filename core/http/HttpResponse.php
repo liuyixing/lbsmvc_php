@@ -1,10 +1,4 @@
 <?php
-namespace lbs\http;
-
-use lbs\Response;
-use lbs\View;
-use lbs\Logger;
-
 class HttpResponse extends Response
 {
 	public function __construct($request)
