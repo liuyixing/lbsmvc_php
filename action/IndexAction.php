@@ -3,7 +3,7 @@ namespace lbsmvc\action;
 
 use lbsmvc\service\NewsService;
 
-class IndexAction extends BaseAction
+class IndexAction
 {
     public static function index($request, $response)
     {

@@ -43,7 +43,7 @@ class Proxy
             }
         }
 
-        $ret = call_user_func_array(array($action_class, $action_method), array($request, $reponse));
+        $ret = call_user_func_array(array($action_class, $action_method), array($request, $response));
 
         // call postActions
         foreach (self::$post_actions as $act)

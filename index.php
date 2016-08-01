@@ -9,6 +9,6 @@ require __DIR__.'/core/init.php';
 $request = new \lbsmvc\core\http\HttpRequest;
 $response = new \lbsmvc\core\http\HttpResponse($request);
 
-$ret = Proxy::route($request, $response);
+$ret = \lbsmvc\core\Proxy::route($request, $response);
 
 echo $ret ? $response->getContent() : $response->getError();

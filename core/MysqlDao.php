@@ -71,7 +71,7 @@ class MysqlDao
 				// 连接mysql
 				self::$pool[$conf_key] = new \PDO($dsn, $username, $password, $opts);
 		    }
-		    catch (Exception $e)
+		    catch (\Exception $e)
 		    {
 				Logger::error("connect mysql failed, due to: $e");
 				return false;
@@ -85,7 +85,7 @@ class MysqlDao
 		    $ret = call_user_func_array("self::$method", $args);
 		    return $ret;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 		   Logger::error("error occurred while calling $func, error: $e, args: ".json_encode(func_get_args()));
 		}
