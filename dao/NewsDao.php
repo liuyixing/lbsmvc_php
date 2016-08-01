@@ -3,7 +3,7 @@ namespace lbsmvc\dao;
 
 use lbsmvc\core\MysqlDao;
 
-class NewsDao
+class NewsDao extends MysqlDao
 {
     public static function getNewsList($offset, $limit)
     {
@@ -11,6 +11,6 @@ class NewsDao
     	    'table' => 'news',
             'limit' => "$offset, $limit",
         );
-        return MysqlDao::getAll($condition);
+        return self::getAll($condition);
     }
 }

@@ -3,6 +3,7 @@ namespace lbsmvc\core\http;
 
 use lbsmvc\core\Response;
 use lbsmvc\core\View;
+use lbsmvc\core\Logger;
 
 class HttpResponse extends Response
 {
@@ -17,7 +18,32 @@ class HttpResponse extends Response
 		{
 			$tpl_name = $this->request->route;
 		}
-		$this->setContent(View::render($tpl_name, $tpl_data));
+
+		$content = View::render($tpl_name, $tpl_data);
+		if (false === $content)
+		{
+			Logger::error("render page failed, args: ".json_encode(func_get_args()));
+			return false;
+		}
+
+		$this->setContent($content);
 		return true;
+	}
+
+	public function json($code, $msg, $data)
+	{
+		$json = json_encode(array('code' => $code, 'msg' => $msg, 'data' => $data));
+		$this->setContent($json);
+		return true;
+	}
+
+	public function header($name, $value)
+	{
+		header("$name: $value");
+	}
+
+	public function cookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $http_only = false)
+	{	
+		setcookie($name, $value, $expire, $path, $domain, $secure, $http_only);
 	}
 }

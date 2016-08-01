@@ -5,13 +5,6 @@ use lbsmvc\core\Request;
 
 class HttpRequest extends Request
 {
-	public $http_method;
-	public $host;
-	public $url;
-	public $referer;
-	public $user_agent;
-	public $cookie;
-
 	public function __construct()
 	{
 		$route = empty($_GET['r']) ? 'index_index' : strtolower($_GET['r']);
@@ -35,7 +28,23 @@ class HttpRequest extends Request
 		$this->action_class = $action_class;
 		$this->action_method = $action_method;
 		$this->action_params = $params;
+		$this->client_ip = $_SERVER['REMOTE_ADDR'];
 
 		return true;
 	}
+
+	public function header($name)
+	{
+
+	}
+
+	public function cookie($name)
+	{
+		return isset($_COOKIE[$name]) ? $_COOKIE[$name] : NULL;
+	}
+
+	public function env($name)
+	{
+
+	}	
 }
