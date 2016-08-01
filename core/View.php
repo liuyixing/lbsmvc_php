@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace lbs;
 
 class View
 {
@@ -15,7 +15,7 @@ class View
         
     	$__tpl_file = TPL_PATH . str_replace('.', DS, $__tpl_name) . self::$tpl_ext;
 
-        if (is_readable($__tpl_file))
+        if (!is_readable($__tpl_file))
         {
             Logger::error("$__tpl_file is not readable");
             return false;

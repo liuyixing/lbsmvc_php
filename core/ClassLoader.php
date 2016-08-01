@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace lbs;
 
 class ClassLoader
 {   
@@ -19,26 +19,20 @@ class ClassLoader
 
     public static function loadClass($class_name)
     {
-    	if (strpos($class_name, FRAMEWORK_NAME) !== 0)
-    	{
-            $alias_name = $class_name;
-            $class_name = strtr($class_name, FRAMEWORK_NAME, 'core');
-    	}
-        if (isset(self::$class_aliases[$class_name]))
+		if (strpos($class_name, FRAMEWORK_NAME) === 0)
+		{
+			$class_name = 'core' . substr($class_name, strlen(FRAMEWORK_NAME));
+		}
+		if (isset(self::$class_aliases[$class_name]))
         {
             $class_name = self::$class_aliases[$class_name];
         }
-    	$class_name = substr($class_name, strlen(FRAMEWORK_NAME . NS));
     	$file_path = ROOT_PATH . str_replace(NS, DS, $class_name) . self::$file_ext;
 
         // 文件存在而且可读
         if (is_readable($file_path)) {
             include $file_path;
         }
-        if (isset($alias_name) && class_exists($class_name))
-        {
-            class_alias($class_name, $alias_name);
-        }
-    }
+	} 
 }
 ClassLoader::init();

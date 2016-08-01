@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace lbs;
 
 abstract class Session
 {

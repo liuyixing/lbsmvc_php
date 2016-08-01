@@ -1,7 +1,7 @@
 <?php
-namespace lbsmvc\core;
+namespace lbs;
 
-use lbsmvc\core\Session;
+use lbs\Session;
 
 class HttpSession extends Session
 {

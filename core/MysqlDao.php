@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace lbs;
 
 // 多库访问
 // @TODO: 读写分离

@@ -1,7 +1,7 @@
 <?php
 namespace service;
 
-use lbs\NewsDao;
+use dao\NewsDao;
 
 class NewsService
 {
