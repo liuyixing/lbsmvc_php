@@ -1,9 +1,9 @@
 <?php
-namespace lbsmvc\core\http;
+namespace lbs\http;
 
-use lbsmvc\core\Response;
-use lbsmvc\core\View;
-use lbsmvc\core\Logger;
+use lbs\Response;
+use lbs\View;
+use lbs\Logger;
 
 class HttpResponse extends Response
 {

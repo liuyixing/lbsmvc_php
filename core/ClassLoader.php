@@ -1,5 +1,5 @@
 <?php
-namespace lbsmvc\core;
+namespace core;
 
 class ClassLoader
 {   
@@ -19,10 +19,10 @@ class ClassLoader
 
     public static function loadClass($class_name)
     {
-    	// 只加载定义在框架命名空间下的类
     	if (strpos($class_name, FRAMEWORK_NAME) !== 0)
     	{
-    	    return;
+            $alias_name = $class_name;
+            $class_name = strtr($class_name, FRAMEWORK_NAME, 'core');
     	}
         if (isset(self::$class_aliases[$class_name]))
         {
@@ -34,6 +34,10 @@ class ClassLoader
         // 文件存在而且可读
         if (is_readable($file_path)) {
             include $file_path;
+        }
+        if (isset($alias_name) && class_exists($class_name))
+        {
+            class_alias($class_name, $alias_name);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
-namespace lbsmvc\action;
+namespace action;
 
-use lbsmvc\service\NewsService;
+use service\NewsService;
 
 class IndexAction
 {

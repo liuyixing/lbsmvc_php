@@ -1,5 +1,5 @@
 <?php
-namespace lbsmvc\core;
+namespace core;
 
 // 多库访问
 // @TODO: 读写分离

@@ -1,7 +1,7 @@
 <?php
-namespace lbsmvc\core\http;
+namespace lbs\http;
 
-use lbsmvc\core\Request;
+use lbs\Request;
 
 class HttpRequest extends Request
 {
@@ -35,7 +35,7 @@ class HttpRequest extends Request
 
 	public function header($name)
 	{
-
+		
 	}
 
 	public function cookie($name)

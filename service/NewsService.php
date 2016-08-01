@@ -1,7 +1,7 @@
 <?php
-namespace lbsmvc\service;
+namespace service;
 
-use lbsmvc\dao\NewsDao;
+use lbs\NewsDao;
 
 class NewsService
 {

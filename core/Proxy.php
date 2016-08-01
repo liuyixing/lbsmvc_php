@@ -1,5 +1,5 @@
 <?php
-namespace lbsmvc\core;
+namespace core;
 
 class Proxy
 {
@@ -18,7 +18,7 @@ class Proxy
 
     public static function route($request, $response)
     {
-		$action_class = "\\lbsmvc\\action\\".ucfirst($request->action_class)."Action";
+		$action_class = "\\action\\".ucfirst($request->action_class)."Action";
 		$action_method = $request->action_method;
 
         if (!class_exists($action_class))

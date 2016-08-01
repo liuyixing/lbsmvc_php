@@ -1,7 +1,7 @@
 <?php
-namespace lbsmvc\dao;
+namespace dao;
 
-use lbsmvc\core\MysqlDao;
+use lbs\MysqlDao;
 
 class NewsDao extends MysqlDao
 {

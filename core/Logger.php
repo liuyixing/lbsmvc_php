@@ -1,5 +1,5 @@
 <?php
-namespace lbsmvc\core;
+namespace core;
 
 class Logger
 {
