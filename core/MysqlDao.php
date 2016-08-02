@@ -1,5 +1,5 @@
 <?php
-namespace LBS;
+namespace core;
 
 // 多库访问
 // @TODO: 读写分离
@@ -15,13 +15,16 @@ class MysqlDao
     {
     	// 根据配置文件，设置类别名，用于多库访问
     	if (!empty($conf)) 
-    	{
+    	{	
+			/*
     		foreach ($conf as $alias => $_)
     		{
     			class_alias(__CLASS__, __NAMESPACE__ . NS . self::$alias_prefix . $alias);
     		}
+			*/
     		self::$conf = $conf;
     	}
+		
     }
     
     public static function __callStatic($func, $args)
@@ -57,7 +60,7 @@ class MysqlDao
 		    {
 		    	if (!isset(self::$conf[$conf_key]))
 				{
-					Logger::error("config $conf_key not exists");
+					Logger::error("$conf_key config not exists");
 					return false;
 				}
 				$conf = self::$conf[$conf_key];

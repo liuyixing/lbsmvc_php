@@ -2,13 +2,13 @@
 require __DIR__.'/core/init.php';
 
 // 配置shutdown函数
-C::set('eh.shutdown_func', array('RspManager', 'send'));
+//C::set('eh.shutdown_func', array('RspManager', 'send'));
 
-ErrorHandler::init();
+\core\ErrorHandler::init();
 
-$request = new HttpRequest;
-$response = new HttpResponse($request);
+$request = new \core\http\HttpRequest;
+$response = new \core\http\HttpResponse($request);
 
-$ret = Proxy::route($request, $response);
+$ret = \core\Proxy::route($request, $response);
 
 echo $ret ? $response->getContent() : $response->getError();

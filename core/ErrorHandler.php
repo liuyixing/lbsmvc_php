@@ -1,5 +1,5 @@
 <?php
-namespace lbs;
+namespace core;
 
 class ErrorHandler
 {

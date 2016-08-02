@@ -1,4 +1,8 @@
 <?php
+namespace core\http;
+
+use core\Request;
+
 class HttpRequest extends Request
 {
 	public function __construct()

@@ -1,13 +1,17 @@
 <?php
+namespace action;
+
+use service\NewsService;
+
 class IndexAction
 {
-    public static function index($request, $response)
+    public static function index($req, $rsp)
     {
-    	$page = empty($request->params['p']) ? 1 : (int)$request->params['p'];
+    	$page = empty($req->params['p']) ? 1 : (int)$req->params['p'];
     	$size = 10;
         $data = array(
             'news' => NewsService::getNewsList($page, $size)
         );
-    	return $response->display($data);
+    	return $rsp->display($data);
     }
 }

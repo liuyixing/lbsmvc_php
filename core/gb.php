@@ -9,6 +9,4 @@ define("ERR_ACTION_METHOD_NOT_EXISTS", 4001);
 
 
 //------------------ 别名 ------------------------
-class_alias('LBS\ConfigManager', 'C');
-class_alias('LBS\Logger', 'Log');
-class_alias('LBS\MysqlDao', 'MysqlDao');
+

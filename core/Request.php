@@ -1,5 +1,5 @@
 <?php
-namespace LBS;
+namespace core; 
 
 abstract class Request
 {

@@ -1,5 +1,5 @@
 <?php
-namespace LBS;
+namespace core;
 
 class Logger
 {

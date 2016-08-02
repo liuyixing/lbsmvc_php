@@ -1,4 +1,9 @@
 <?php
+namespace core\http;
+
+use core\Response;
+use core\View;
+
 class HttpResponse extends Response
 {
 	public function __construct($request)
