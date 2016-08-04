@@ -1,5 +1,5 @@
 <?php
-namespace core; 
+namespace framework;
 
 abstract class Request
 {
@@ -8,4 +8,5 @@ abstract class Request
 	public $action_method;
 	public $action_params;
 	public $client_ip;
+	public $start_time;
 }

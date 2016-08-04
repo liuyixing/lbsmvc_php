@@ -1,17 +1,27 @@
 <?php
-namespace action;
-
-use service\NewsService;
-
 class IndexAction
 {
     public static function index($req, $rsp)
     {
-    	$page = empty($req->params['p']) ? 1 : (int)$req->params['p'];
+    	$page = $req->get('p');
     	$size = 10;
         $data = array(
             'news' => NewsService::getNewsList($page, $size)
         );
-    	return $rsp->display($data);
+    	return $rsp->page($data);  
+    }
+
+    public static function ajaxNews($req, $rsp)
+    {
+    	$page = empty($req->params['p']);
+    	$ua = $req->header('useragent');
+    	$uid = $req->cookie('uid');
+    	$size = 10;
+        $data = array(
+            'news' => NewsService::getNewsList($page, $size)
+        );
+    	return $rsp->json(0, '', $data);
     }
 }
+
+

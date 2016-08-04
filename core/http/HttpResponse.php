@@ -1,8 +1,10 @@
 <?php
-namespace core\http;
+namespace framework\http;
 
-use core\Response;
-use core\View;
+use framework\Response;
+use framework\View;
+use framework\ConfigManager;
+use framework\Logger;
 
 class HttpResponse extends Response
 {
@@ -11,7 +13,7 @@ class HttpResponse extends Response
 		parent::__construct($request);
 	}	
 
-	public function display($tpl_data, $tpl_name = '')
+	public function page($tpl_data, $tpl_name = '')
 	{
 		if (empty($tpl_name))
 		{
@@ -29,11 +31,16 @@ class HttpResponse extends Response
 		return true;
 	}
 
-	public function json($code, $msg, $data)
+	public function json($code = 0, $msg = '', $data = array())
 	{
-		$json = json_encode(array('code' => $code, 'msg' => $msg, 'data' => $data));
-		$this->setContent($json);
+		$json_str = json_encode(array('code' => $code, 'msg' => $msg, 'data' => $data));
+		$this->setContent($json_str);
 		return true;
+	}
+
+	public function error($code)
+	{
+		$this->code = $code;
 	}
 
 	public function header($name, $value)
@@ -41,8 +48,36 @@ class HttpResponse extends Response
 		header("$name: $value");
 	}
 
-	public function cookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $http_only = false)
+	public function cookie($name, $value, $expire = 3600, $path = '', $domain = '', $secure = false, $http_only = false)
 	{	
+		if (empty($path))
+		{
+			$path = ConfigManager::get('domain');
+		}
+		if (empty($domain))
+		{
+			$domain = ConfigManager::get('domain');
+		}
 		setcookie($name, $value, $expire, $path, $domain, $secure, $http_only);
 	}
+
+	public function send()
+	{
+		if (!$this->is_sent)
+		{
+			return;
+		}
+
+		if ($this->code === 0)
+		{
+			echo $this->content;
+		}
+		else
+		{
+			echo $this->code;
+		}
+
+		$this->is_sent = true;
+	}
+
 }

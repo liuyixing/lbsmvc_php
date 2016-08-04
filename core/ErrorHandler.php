@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace framework;
 
 class ErrorHandler
 {

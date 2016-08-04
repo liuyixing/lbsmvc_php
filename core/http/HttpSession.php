@@ -1,7 +1,7 @@
 <?php
-namespace core\http;
+namespace framework\http;
 
-use core\Session;
+use framework\Session;
 
 class HttpSession extends Session
 {

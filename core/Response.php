@@ -1,12 +1,13 @@
 <?php
-namespace core;
+namespace framework;
 
 abstract class Response
 {
 	public $is_sent;
 	public $content;
 	public $request;
-	public $error;
+	public $code;
+	
 
 	public function __construct($request)
 	{
@@ -18,11 +19,6 @@ abstract class Response
 	public function setContent($content)
 	{
 		$this->content = $content;
-	}
-
-	public function setError($error)
-	{
-		$this->error = $error;
 	}
 
 	public function getContent()

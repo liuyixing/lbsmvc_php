@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace framework;
 
 // 多库访问
 // @TODO: 读写分离
