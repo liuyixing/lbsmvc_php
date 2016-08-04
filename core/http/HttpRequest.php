@@ -29,7 +29,7 @@ class HttpRequest extends Request
 	   	$params = array_merge($_GET, $_POST);
 
 		$this->route = $route;
-		$this->action_class = $action_class;
+		$this->action_class = ucfirst($action_class) . 'Action';
 		$this->action_method = $action_method;
 		$this->action_params = $params;
 		$this->client_ip = $_SERVER['REMOTE_ADDR'];

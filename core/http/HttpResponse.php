@@ -26,7 +26,7 @@ class HttpResponse extends Response
 			Logger::error("render page failed, args: ".json_encode(func_get_args()));
 			return false;
 		}
-
+		$this->code = 0;
 		$this->setContent($content);
 		return true;
 	}
@@ -63,7 +63,7 @@ class HttpResponse extends Response
 
 	public function send()
 	{
-		if (!$this->is_sent)
+		if ($this->is_sent)
 		{
 			return;
 		}

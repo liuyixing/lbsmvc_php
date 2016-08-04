@@ -1,8 +1,8 @@
 <?php
 //------------------ 别名 ------------------------
-use framework\MysqlDao as DB;
-use framework\ConfigManager as Conf;
-use framework\Logger as Log;
+class_alias('framework\MysqlDao', 'DB');
+class_alias('framework\ConfigManager', 'Conf');
+class_alias('framework\Logger', 'Log');
 
 //------------------ 常量 ------------------------
 define("ERR_ACTION_CLASS_NOT_EXISTS", 4000);
