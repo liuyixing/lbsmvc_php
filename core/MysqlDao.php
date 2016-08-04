@@ -16,12 +16,10 @@ class MysqlDao
     	// 根据配置文件，设置类别名，用于多库访问
     	if (!empty($conf)) 
     	{	
-			/*
     		foreach ($conf as $alias => $_)
     		{
     			class_alias(__CLASS__, __NAMESPACE__ . NS . self::$alias_prefix . $alias);
     		}
-			*/
     		self::$conf = $conf;
     	}
 		

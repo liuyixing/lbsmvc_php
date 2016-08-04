@@ -38,12 +38,13 @@ class HttpRequest extends Request
 		$this->cookies = $_COOKIE;
 		$this->headers = $_SERVER;
 		$this->is_ajax = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
-		unset($_GET, $_POST, $_COOKIE, $_SERVER);
+		unset($_GET, $_POST, $_REQUEST, $_COOKIE, $_SERVER);
 		return true;
 	}
 
 	public function header($name)
 	{
+		$name = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
 		return isset($this->headers[$name]) ? $this->headers[$name] : NULL;
 	}
 

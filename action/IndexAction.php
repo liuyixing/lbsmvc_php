@@ -1,9 +1,9 @@
 <?php
 class IndexAction
 {
-    public static function index($req, $rsp)
+	public static function index($req, $rsp)
     {
-    	$page = $req->get('p');
+    	$page = $req->get('p', 1);
     	$size = 10;
         $data = array(
             'news' => NewsService::getNewsList($page, $size)
@@ -14,7 +14,7 @@ class IndexAction
     public static function ajaxNews($req, $rsp)
     {
     	$page = empty($req->params['p']);
-    	$ua = $req->header('useragent');
+    	$ua = $req->header('user-agent');
     	$uid = $req->cookie('uid');
     	$size = 10;
         $data = array(
