@@ -42,6 +42,10 @@ class ClassLoader
         {
             $file_path = DAO_PATH . $class_name . self::$file_ext;
         }
+        elseif (substr_compare($class_name, 'Lib', -strlen('Lib')) === 0) // lib类
+        {
+            $file_path = LIB_PATH . strtolower(substr($class_name, 0, -strlen('Lib'))) . DS . $class_name . self::$file_ext;
+        }
         else
         {
             return;
