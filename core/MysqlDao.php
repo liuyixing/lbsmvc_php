@@ -8,21 +8,14 @@ class MysqlDao
 {
     private static $pool = array();
     private static $conf = array();
-    private static $alias_prefix = 'DB_';
-    private static $conn;
+    private static $conn = NULL;
 
     public static function init($conf)
     {
-    	// 根据配置文件，设置类别名，用于多库访问
     	if (!empty($conf)) 
     	{	
-    		foreach ($conf as $alias => $_)
-    		{
-    			class_alias(__CLASS__, __NAMESPACE__ . NS . self::$alias_prefix . $alias);
-    		}
     		self::$conf = $conf;
     	}
-		
     }
     
     public static function __callStatic($func, $args)
@@ -46,22 +39,17 @@ class MysqlDao
 		}
 
     	// 创建连接
-    	$conf_key = 'default';
-    	$called_class = get_called_class();
-    	if (strpos($called_class, self::$alias_prefix) !== false)
-    	{
-    		$conf_key = strtolower(substr($called_class, strlen(self::$alias_prefix)));
-    	}
-		if (!isset(self::$pool[$conf_key]))
+    	$db_name = isset(static::$db) ? static::$db : 'default';
+		if (!isset(self::$pool[$db_name]))
 		{   
 		    try
 		    {
-		    	if (!isset(self::$conf[$conf_key]))
+		    	if (!isset(self::$conf[$db_name]))
 				{
-					Logger::error("$conf_key config not exists");
+					Logger::error("$db_name config not found");
 					return false;
 				}
-				$conf = self::$conf[$conf_key];
+				$conf = self::$conf[$db_name];
 				$dsn = 'mysql:host='.$conf['host'].';port='.$conf['port'].';dbname='.$conf['dbname'].';charset='.$conf['charset'];
 				$username = $conf['username'];
 				$password = $conf['password'];
@@ -70,7 +58,7 @@ class MysqlDao
 				    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION // 出错抛异常
 				);
 				// 连接mysql
-				self::$pool[$conf_key] = new \PDO($dsn, $username, $password, $opts);
+				self::$pool[$db_name] = new \PDO($dsn, $username, $password, $opts);
 		    }
 		    catch (\Exception $e)
 		    {
@@ -79,16 +67,15 @@ class MysqlDao
 		    }
 		}
 
-		self::$conn = self::$pool[$conf_key];
-
 		try
 		{
+			self::$conn = self::$pool[$db_name];
 		    $ret = call_user_func_array("self::$method", $args);
 		    return $ret;
 		}
 		catch (\Exception $e)
 		{
-		   Logger::error("error occurred while calling $func, error: $e, args: ".json_encode(func_get_args()));
+			Logger::error("error occurred while calling $func, error: $e, args: ".json_encode(func_get_args()));
 		}
 		return false;
     }
@@ -131,7 +118,8 @@ class MysqlDao
 		    $field = $condition['field'];
 		}
 
-		$table = $condition['table'];
+		$tmp_table = empty($condition['table']) ? '' : $condition['table'];
+		$table = self::_getTable($tmp_table);
 	    
 		$where = "";
 		if (!empty($condition["where"]))
@@ -219,7 +207,7 @@ class MysqlDao
 		return false;
 	}
 
-    private static function _update($condition, $data)
+    private static function _update($condition, $data, $table = '')
     {
 		$columns = array();
 		$params = array();
@@ -230,11 +218,10 @@ class MysqlDao
 		}
 
 		$columns = implode(",", $columns);
-		$table = $condition["table"];
-		$where = self::_buildWhere($condition["where"], $params);
+		$where = self::_buildWhere($condition, $params);
 		$sql = implode(" ", array(
 		    "update",
-		    $table,
+		    self::_getTable($table),
 		    "set",
 		    $columns,
 		    $where,
@@ -251,7 +238,7 @@ class MysqlDao
 		return $ret->rowCount();
     }
 
-    private static function _insert($data, $table)
+    private static function _insert($data, $table = '')
     {
 		$columns = array();
 		$params = array();
@@ -264,7 +251,7 @@ class MysqlDao
 		$columns = implode(",", $params);
 		$sql = implode(" ", array(
 		    "insert",
-		    $table,
+		    self::_getTable($table),
 		    "set",
 		    $columns,
 		));
@@ -280,7 +267,7 @@ class MysqlDao
 		return self::$conn->lastInsertId(); // 如果表格没有自增ID，这里会返回什么？
     }
 
-    private static function _delete($condition)
+    private static function _delete($condition, $table = '')
     {
 		$params = array();
 		$where = self::_buildWhere($condition['where'], $params);
@@ -288,7 +275,7 @@ class MysqlDao
 		$table = $condition['table'];
 		$sql = implode(" ", array(
 		    "delete from",
-		    $table,
+		    self::_getTable($table),
 		    $where,
 		));	
 
@@ -301,6 +288,20 @@ class MysqlDao
 		    return false;
 		}
 		return $ret->rowCount();
+    }
+
+    private static function _getTable($table = '')
+    {
+    	if (!empty($table))
+    	{
+    		return $table;
+    	}
+    	if (isset(static::$table))
+    	{
+    		return static::$table;
+    	}
+    	$class_name = get_called_class();
+    	return strtolower(substr($class_name, 0, -3));
     }
 }
 MysqlDao::init(ConfigManager::get('mysql'));
