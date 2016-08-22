@@ -4,18 +4,18 @@ namespace framework;
 class ClassLoader
 {   
     // 框架根据类的名称查找源文件进行加载，大小写敏感，此处可以设置别名映射
-    public static $class_aliases = array( 
+    public static $class_aliases = array(
     );
     private static $file_ext = '.php';
 
     public static function init()
     {
-	   spl_autoload_register(__CLASS__.'::loadClass', true, true);
+        spl_autoload_register(__CLASS__.'::loadClass', true, true);
     }
 
     public static function setAlias($class, $alias)
     {
-        self::$class_aliases[$class] = $clias;
+        self::$class_aliases[$class] = $alias;
     }
 
     public static function loadClass($class_name)
@@ -52,9 +52,10 @@ class ClassLoader
         }
 
         // 文件存在而且可读
-        if (is_readable($file_path)) {
+        if (is_readable($file_path))
+        {
             include $file_path;
         }
-	} 
+	}
 }
 ClassLoader::init();
